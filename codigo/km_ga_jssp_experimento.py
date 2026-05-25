@@ -11,17 +11,18 @@ from pathlib import Path
 
 
 # ==============================================================================
-# KM-GA PARA JSSP - PRIMERA IMPLEMENTACION FUNCIONAL
+# KM-GA PARA JSSP - EXPERIMENTO FINAL A-D EN TRES CASOS
 # ==============================================================================
 # Base reutilizada:
 # - cruza_pmx() y calcular_makespan() vienen del archivo Python T8/T9 entregado.
 # - La estructura del AG conserva torneo, PMX, mutacion dinamica y elitismo.
 #
-# Nuevo en este archivo:
+# Integracion implementada:
 # - Configuracion A: poblacion 100% aleatoria.
 # - Configuracion B: 70% K-Means Perfil 1 + SPT, 30% aleatoria.
 # - Configuracion C: Perfil 1 + SPT, Perfil 2 + SPT y aleatoria.
 # - Configuracion D: mezcla de Perfil 1/2 con SPT, LPT, MWR y MOPNR.
+# - Casos evaluados: Base, Mediano y Grande.
 # - Ejecucion con semillas 1, 2 y 3.
 # - Guardado de resultados y convergencia en CSV.
 # ==============================================================================
