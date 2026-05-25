@@ -1,0 +1,9 @@
+parametro,valor
+caso,Grande
+trabajos,30
+maquinas,20
+operaciones_minimas,8
+operaciones_maximas,10
+tiempo_minimo,10
+tiempo_maximo,120
+semilla_instancia,3020

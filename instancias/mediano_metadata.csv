@@ -1,0 +1,9 @@
+parametro,valor
+caso,Mediano
+trabajos,15
+maquinas,14
+operaciones_minimas,5
+operaciones_maximas,7
+tiempo_minimo,10
+tiempo_maximo,120
+semilla_instancia,1514

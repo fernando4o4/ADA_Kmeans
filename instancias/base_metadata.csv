@@ -1,0 +1,9 @@
+parametro,valor
+caso,Base
+trabajos,8
+maquinas,14
+operaciones_minimas,1
+operaciones_maximas,5
+tiempo_minimo,10
+tiempo_maximo,120
+semilla_instancia,proporcionada
