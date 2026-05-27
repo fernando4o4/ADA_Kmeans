@@ -1,0 +1,70 @@
+# Plan de Implementación: Replicación de AG-JSSP y K-Means en R
+
+Este plan describe la propuesta de diseño y desarrollo para replicar la lógica de optimización Job Shop Scheduling Problem (JSSP) mediante Algoritmo Genético e inicialización guiada por K-Means (KM-GA) a lenguaje **R**.
+
+A petición del usuario, nos enfocaremos **exclusivamente** en los algoritmos de optimización (`AG-jssp` y `K-Means`) y en la reproducción exacta de los experimentos, omitiendo cualquier tipo de exportación a Excel y librerías innecesarias de reporte.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Compatibilidad de Instancias (Python vs R)**
+> Para asegurar la máxima reproducibilidad y precisión matemática de los resultados (Makespan), el script en R **cargará las instancias experimentales directamente desde los archivos CSV ya generados** en la carpeta `instancias/` del proyecto. Esto asegura que ambos lenguajes trabajen sobre las mismas matrices de tiempos y secuencias de trabajos sin la distorsión que causarían las diferencias entre los generadores de números pseudoaleatorios de Python (NumPy PCG64) y R (Mersenne-Twister).
+
+> [!NOTE]
+> **Estructura del Proyecto en R**
+> - Crearemos un script limpio, autocontenido y comentado: `codigo/km_ga_jssp_experimento.R`.
+> - Utilizaremos únicamente la función nativa `kmeans` de R (de la librería base `stats`), lo que elimina la necesidad de instalar dependencias externas pesadas en R.
+
+---
+
+## Proposed Changes
+
+Crearemos el nuevo script de R en la carpeta `codigo`.
+
+### [Component: Algoritmo de Optimización en R]
+
+#### [NEW] [km_ga_jssp_experimento.R](file:///c:/Users/Max/Downloads/ADA_Kmeans/codigo/km_ga_jssp_experimento.R)
+
+Este archivo contendrá toda la lógica estructurada:
+
+1. **Definición de Constantes y Configuración**:
+   - Parámetros experimentales idénticos:
+     - `N_INDIVIDUOS = 20`
+     - `M_GENERACIONES = 50`
+     - `K_TORNEO = 3`
+     - `K_CLUSTERS = 3`
+     - Semillas del AG: `1, 2, 3`
+     - Configuraciones: `A, B, C, D`
+
+2. **Carga y Validación de Instancias**:
+   - Función para cargar los CSVs de secuencia y tiempos de las tres instancias (`base`, `mediano`, `grande`) desde la carpeta `./instancias` o `../instancias`.
+
+3. **Cálculo de Makespan (1-Based)**:
+   - Traducción exacta del algoritmo de programación temporal del JSSP de Python a R, ajustando los índices de base-0 a base-1.
+
+4. **Operador de Cruce PMX (Partially Mapped Crossover)**:
+   - Implementación del cruce PMX operando sobre matrices R de 1-base.
+
+5. **Clustering con K-Means e Inicialización**:
+   - Extracción de perfiles (`perfil1_carga` y `perfil2_uso`) a partir de la matriz de tiempos.
+   - Ejecución de `kmeans` nativo de R.
+   - Reglas de despacho (`SPT`, `LPT`, `MWR`, `MOPNR`) implementadas mediante ordenamiento lexicográfico en R (`order()`).
+   - Variaciones de orden controlado (`rcl`, `intercambio`, `inversion`, `rotacion`).
+
+6. **Algoritmo Genético (AG)**:
+   - Selección por torneo, cruce PMX para matrices de máquinas, mutación dinámica (con tasas del 2% al 5%) y elitismo.
+
+7. **Bucle del Experimento**:
+   - Ejecución de las 36 corridas (3 instancias × 4 configuraciones × 3 semillas).
+   - Generación de tablas de resumen estadístico directamente en consola y guardado en archivos CSV simples en `codigo/resultados_r/`.
+
+---
+
+## Verification Plan
+
+### Automated & Manual Tests
+1. **Validación de Makespan**: Ejecutaremos pruebas manuales del cálculo del `makespan` sobre el cromosoma inicial para validar que dé resultados matemáticamente idénticos a los del script en Python.
+2. **Validación del Algoritmo Genético**: Ejecutaremos el script de R `km_ga_jssp_experimento.R` y verificaremos que converja a valores de makespan óptimos o muy cercanos a los reportados en Python, demostrando la consistencia de la heurística.
+3. **Comprobación de la Estructura**: Validaremos que el script R se ejecute de forma fluida y sin dependencias no estándar.
